@@ -48,27 +48,27 @@ let certo1 = window.document.getElementById("certo1")
 let errado1 = window.document.getElementById("errado1")
 
 if (perg1 == true) {
-    certo1.innerHTML= ("Resposta " + perg1)
+    certo1.innerHTML= "Resposta " + perg1
 }   else {
-    errado1.innerHTML= ("Resposta " + perg1)
+    errado1.innerHTML= "Resposta " + perg1
 }
 
 let certo2 = window.document.getElementById("certo2")
 let errado2 = window.document.getElementById("errado2")
 
 if (perg2 == true) {
-    certo2.innerHTML= ("Resposta " + perg2)
+    certo2.innerHTML= "Resposta " + perg2
 }   else {
-    errado2.innerHTML= ("Resposta " + perg2)
+    errado2.innerHTML= "Resposta " + perg2
 }
 
 let certo3 = window.document.getElementById("certo3")
 let errado3 = window.document.getElementById("errado3")
 
 if (perg3 == true) {
-    certo3.innerHTML= ("Resposta " + perg3)
+    certo3.innerHTML= "Resposta " + perg3
 }   else {
-    errado3.innerHTML= ("Resposta " + perg3)
+    errado3.innerHTML= "Resposta " + perg3
 }
 
 
