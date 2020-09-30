@@ -1,0 +1,23 @@
+.cabecalho {
+    background-color: rgb(156, 155, 153);
+}
+
+h1 {
+    font-size: 60px;
+    text-align: center;
+}
+
+p {
+    font-size: 30px;
+    text-align: center;
+}
+
+.boxes {
+    display: inline-block; 
+    align-content: center;
+    margin: 10px;
+    border: 3px solid black;
+    width: 200px;
+    height: 200px;
+    justify-content: center;
+}
