@@ -133,6 +133,4 @@ function showQuizQuestions(shouldDisplay, userName) {
       "Element with id 'container-resultado' not found in the DOM."
     );
   }
-  resultElement.appendChild(correctDiv);
-  resultElement.appendChild(wrongDiv);
 }
