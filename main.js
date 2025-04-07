@@ -1,13 +1,13 @@
 const questionnaireData = {
   firstQuestion: {
     questionText: "Quem era o vocalista da banda Queen?",
-    selectionOptions: { 1: "Maddona", 2: "Freedy Mercury", 3: "Simone" },
+    selectionOptions: { 1: "Maddona", 2: "Freddie Mercury", 3: "Simone" },
     correctAnswer: 2,
   },
   secondQuestion: {
     questionText: "Quem descobriu o Brasil?",
     selectionOptions: {
-      1: "Cristovam Colombo",
+      1: "Cristóvão Colombo",
       2: "Maria Madalena",
       3: "Pedro Alvares Cabral",
     },
@@ -20,34 +20,45 @@ const questionnaireData = {
   },
 };
 
+const CONFIRMATION_YES = "SIM";
+const CONFIRMATION_NO = "NÃO";
+
 const confirmationOptions = {
-  1: "SIM",
-  2: "NÃO",
+  1: CONFIRMATION_YES,
+  2: CONFIRMATION_NO,
 };
 
-goBack = () => {
-  window.location.reload()
-}
+const goBack = () => {
+  window.location.reload();
+};
 
-clearPage = () => {
-  const hiddenElement = window.document.getElementById("container");
-  hiddenElement.remove();
-  const result = window.document.getElementById("resultado")
-  result.style.removeProperty("display");
-}
+const clearPage = () => {
+  let hiddenElement = window.document.getElementById("container");
+  if (hiddenElement) {
+    hiddenElement.remove();
+  } 
+  const result = window.document.getElementById("resultado");
+  if (result) {
+    result.style.removeProperty("display");
+  }
+};
 
 const checkAnswerValidity = (userResponse) => {
-  if (userResponse === null) {
-    alert("Resposta inválida. Tente novamente.");
-    startQuiz();
-    return false;
-  }
-  if (userResponse === confirmationOptions[2]) {
-    alert("Okay, obrigado e até logo");
-    return false;
-  } else if (userResponse === confirmationOptions[1]) {
-    alert("Okay, Vamos lá... Boa sorte!");
-    return true;
+  switch (userResponse) {
+    case null:
+      alert("Você não digitou nada. Tente novamente.");
+      startQuiz();
+      return false;
+    case CONFIRMATION_NO:
+      alert("Okay, obrigado e até logo");
+      return false;
+    case CONFIRMATION_YES:
+      alert("Okay, Vamos lá... Boa sorte!");
+      return true;
+    default:
+      alert("Você não digitou nada. Tente novamente.");
+      startQuiz();
+      return false;
   }
 };
 
@@ -72,37 +83,56 @@ function showQuizQuestions(shouldDisplay, userName) {
     return;
   }
 
-
   let correctAnswers = 0;
   let wrongAnswers = 0;
   const userAnswers = [];
 
-  for (let [key, currentQuestion] of Object.entries(questionnaireData)) {
-    console.log(currentQuestion);
-    const resposta = Number(prompt(`${currentQuestion.questionText}\n1) ${currentQuestion.selectionOptions[1]}\n2) ${currentQuestion.selectionOptions[2]}\n3) ${currentQuestion.selectionOptions[3]}`));
-    if (resposta)
-      userAnswers.push(resposta);
+
+  for (let [_, currentQuestion] of Object.entries(
+    questionnaireData)) {
+    let resposta;
+    do {
+      resposta = Number(
+        prompt(
+          `${currentQuestion.questionText}\n1) ${currentQuestion.selectionOptions[1]}\n2) ${currentQuestion.selectionOptions[2]}\n3) ${currentQuestion.selectionOptions[3]}`
+        )
+      );
+      if (isNaN(resposta) || ![1, 2, 3].includes(resposta)) {
+        alert("Por favor, insira um número válido entre 1 e 3.");
+      }
+    } while (isNaN(resposta) || ![1, 2, 3].includes(resposta));
+    userAnswers.push(resposta);
     if (resposta === currentQuestion.correctAnswer) {
       correctAnswers++;
     } else {
       wrongAnswers++;
     }
   }
+
   clearPage();
 
   const greetingElement = window.document.getElementById("saudacao");
-  greetingElement.innerText = "Olá, " + userName + "!";
+  if (greetingElement) {
+    greetingElement.innerText = "Olá, " + userName + "!";
+  } else {
+    console.error("Element with id 'saudacao' not found in the DOM.");
+  }
 
-const correctDiv = document.createElement("div");
+  const correctDiv = document.createElement("div");
   correctDiv.innerText = "Você acertou " + correctAnswers;
   correctDiv.className = "resultado-correto";
-  const wrongDiv = document.createElement("div"); 
+  const wrongDiv = document.createElement("div");
   wrongDiv.innerText = "Você errou " + wrongAnswers;
   wrongDiv.className = "resultado-errado";
-
   const resultElement = window.document.getElementById("container-resultado");
+  if (resultElement) {
+    resultElement.appendChild(correctDiv);
+    resultElement.appendChild(wrongDiv);
+  } else {
+    console.error(
+      "Element with id 'container-resultado' not found in the DOM."
+    );
+  }
   resultElement.appendChild(correctDiv);
   resultElement.appendChild(wrongDiv);
 }
-
-
