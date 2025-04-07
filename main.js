@@ -1,76 +1,108 @@
-let nome = prompt("Digite o seu nome:")
-const saudacao = window.document.getElementById('saudacao')
-saudacao.innerText="Olá, " + nome + "!";
+const questionnaireData = {
+  firstQuestion: {
+    questionText: "Quem era o vocalista da banda Queen?",
+    selectionOptions: { 1: "Maddona", 2: "Freedy Mercury", 3: "Simone" },
+    correctAnswer: 2,
+  },
+  secondQuestion: {
+    questionText: "Quem descobriu o Brasil?",
+    selectionOptions: {
+      1: "Cristovam Colombo",
+      2: "Maria Madalena",
+      3: "Pedro Alvares Cabral",
+    },
+    correctAnswer: 3,
+  },
+  thirdQuestion: {
+    questionText: "Quem é Gal Costa?",
+    selectionOptions: { 1: "Cantora", 2: "Modelo", 3: "Atriz" },
+    correctAnswer: 1,
+  },
+};
 
-const confirma = Number(prompt("Coloque o número correspondente à sua resposta. Quer iniciar o teste? (1) SIM | (2) NÃO"))
+const confirmationOptions = {
+  1: "SIM",
+  2: "NÃO",
+};
 
-if (confirma === 1) {
-    let perg1 = Number(prompt("Quem era o vocalista da banda Queen? (1) Maddona | (2) Freedy Mercury | (3) Simone"))
-    let perg2 = Number(prompt("Quem descobriu o Brasil? (1) Cristovam Colombo | (2) Maria Madalena | (3) Pedro Alvares Cabral"))
-    let perg3 = Number(prompt("Quem é Gal Costa? (1) Cantora | (2) Modelo | (3) Atriz"))
-
-function resultado1() {
-    if ( perg1 === 2){
-        document.write("Resposta " + perg1)
-        return true;
-    } else {
-        document.write("Resposta " + perg1)
-        return false
-    }
+goBack = () => {
+  window.location.reload()
 }
 
-resultado1(perg1)
-
-
-function resultado2(){
-    if (perg2 === 3){
-        document.write("Resposta " + perg2)
-        return true;
-    } else {
-        document.write("Resposta " + perg2)
-        return false
-    }
+clearPage = () => {
+  const hiddenElement = window.document.getElementById("container");
+  hiddenElement.remove();
+  const result = window.document.getElementById("resultado")
+  result.style.removeProperty("display");
 }
-resultado2(perg2)
 
-function resultado3(perg3){
-    if (perg3 === 1) {
-        document.write("Resposta " + perg3)
-        return true;
+const checkAnswerValidity = (userResponse) => {
+  if (userResponse === null) {
+    alert("Resposta inválida. Tente novamente.");
+    startQuiz();
+    return false;
+  }
+  if (userResponse === confirmationOptions[2]) {
+    alert("Okay, obrigado e até logo");
+    return false;
+  } else if (userResponse === confirmationOptions[1]) {
+    alert("Okay, Vamos lá... Boa sorte!");
+    return true;
+  }
+};
+
+function startQuiz() {
+  let userName = prompt("Digite o seu nome:") || "Visitante";
+  const userConfirmation =
+    confirmationOptions[
+    Number(
+      prompt(
+        "Coloque o número correspondente à sua resposta. Quer iniciar o teste? (1) SIM | (2) NÃO"
+      )
+    )
+    ] || null;
+  const renderQuestionDisplay = checkAnswerValidity(userConfirmation);
+  if (renderQuestionDisplay) {
+    showQuizQuestions(renderQuestionDisplay, userName);
+  }
+}
+
+function showQuizQuestions(shouldDisplay, userName) {
+  if (!shouldDisplay) {
+    return;
+  }
+
+
+  let correctAnswers = 0;
+  let wrongAnswers = 0;
+  const userAnswers = [];
+
+  for (let [key, currentQuestion] of Object.entries(questionnaireData)) {
+    console.log(currentQuestion);
+    const resposta = Number(prompt(`${currentQuestion.questionText}\n1) ${currentQuestion.selectionOptions[1]}\n2) ${currentQuestion.selectionOptions[2]}\n3) ${currentQuestion.selectionOptions[3]}`));
+    if (resposta)
+      userAnswers.push(resposta);
+    if (resposta === currentQuestion.correctAnswer) {
+      correctAnswers++;
     } else {
-        document.write("Resposta " + perg3)
-        return false
+      wrongAnswers++;
     }
   }
-resultado3(perg3)
+  clearPage();
 
-let certo1 = window.document.getElementById("certo1")
-let errado1 = window.document.getElementById("errado1")
+  const greetingElement = window.document.getElementById("saudacao");
+  greetingElement.innerText = "Olá, " + userName + "!";
 
-if (perg1 == true) {
-    certo1.innerHTML= "Resposta " + perg1
-}   else {
-    errado1.innerHTML= "Resposta " + perg1
-}
+const correctDiv = document.createElement("div");
+  correctDiv.innerText = "Você acertou " + correctAnswers;
+  correctDiv.className = "resultado-correto";
+  const wrongDiv = document.createElement("div"); 
+  wrongDiv.innerText = "Você errou " + wrongAnswers;
+  wrongDiv.className = "resultado-errado";
 
-let certo2 = window.document.getElementById("certo2")
-let errado2 = window.document.getElementById("errado2")
-
-if (perg2 == true) {
-    certo2.innerHTML= "Resposta " + perg2
-}   else {
-    errado2.innerHTML= "Resposta " + perg2
-}
-
-let certo3 = window.document.getElementById("certo3")
-let errado3 = window.document.getElementById("errado3")
-
-if (perg3 == true) {
-    certo3.innerHTML= "Resposta " + perg3
-}   else {
-    errado3.innerHTML= "Resposta " + perg3
+  const resultElement = window.document.getElementById("container-resultado");
+  resultElement.appendChild(correctDiv);
+  resultElement.appendChild(wrongDiv);
 }
 
 
-} else
-alert("Obrigado e até logo")
