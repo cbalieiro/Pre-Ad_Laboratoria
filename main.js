@@ -32,39 +32,51 @@ const goBack = () => {
   window.location.reload();
 };
 
+const handleError = (error) => {
+  console.error("A página enfrentou problemas:", error);
+  goBack();
+}
+
 const clearPage = () => {
   let hiddenElement = window.document.getElementById("container");
   if (hiddenElement) {
     hiddenElement.remove();
-  } 
+  }
   const result = window.document.getElementById("resultado");
   if (result) {
-    result.style.removeProperty("display");
+    try {
+      result.style.removeProperty("display");
+    } catch (error) {
+      handleError(error);
+    }
   }
 };
 
 const checkAnswerValidity = (userResponse) => {
-  switch (userResponse) {
-    case null:
-      alert("Você não digitou nada. Tente novamente.");
-      startQuiz();
-      return false;
-    case CONFIRMATION_NO:
-      alert("Okay, obrigado e até logo");
-      return false;
-    case CONFIRMATION_YES:
-      alert("Okay, Vamos lá... Boa sorte!");
-      return true;
-    default:
-      alert("Você não digitou nada. Tente novamente.");
-      startQuiz();
-      return false;
+  if (!Object.values(confirmationOptions).includes(userResponse)) {
+    alert("Entrada inválida. Por favor, tente novamente e insira um número correspondente a uma opção válida.");
+    return false;
+  }
+  if (userResponse === CONFIRMATION_NO) {
+    alert("Okay, obrigado e até logo");
+    return false;
+  }
+  if (userResponse === CONFIRMATION_YES) {
+    alert("Okay, Vamos lá... Boa sorte!");
+    return true;
   }
 };
 
+const createOutputDiv = (text, className) => {
+  const div = document.createElement("div");
+  div.innerText = text;
+  div.className = className;
+  return div;
+};
+
 function startQuiz() {
-  let userName = prompt("Digite o seu nome:") || "Visitante";
-  const userConfirmation =
+  let userName = prompt("Digite o seu nome (ou deixe em branco para usar 'Visitante'):") || "Visitante";
+  let userConfirmation =
     confirmationOptions[
     Number(
       prompt(
@@ -78,11 +90,8 @@ function startQuiz() {
   }
 }
 
-function showQuizQuestions(shouldDisplay, userName) {
-  if (!shouldDisplay) {
-    return;
-  }
 
+function collectUserAnswers() {
   let correctAnswers = 0;
   let wrongAnswers = 0;
   const userAnswers = [];
@@ -109,28 +118,36 @@ function showQuizQuestions(shouldDisplay, userName) {
     }
   }
 
+  return { correctAnswers, wrongAnswers, userAnswers };
+}
+
+function showQuizQuestions(shouldDisplay, userName) {
+  if (!shouldDisplay) {
+    return;
+  }
+
+  const { correctAnswers, wrongAnswers } = collectUserAnswers();
+
   clearPage();
 
   const greetingElement = window.document.getElementById("saudacao");
   if (greetingElement) {
-    greetingElement.innerText = "Olá, " + userName + "!";
-  } else {
-    console.error("Element with id 'saudacao' not found in the DOM.");
+    try {
+      greetingElement.innerText = "Olá, " + userName + "!";
+    } catch (error) {
+      handleError(error);
+    }
   }
 
-  const correctDiv = document.createElement("div");
-  correctDiv.innerText = "Você acertou " + correctAnswers;
-  correctDiv.className = "resultado-correto";
-  const wrongDiv = document.createElement("div");
-  wrongDiv.innerText = "Você errou " + wrongAnswers;
-  wrongDiv.className = "resultado-errado";
+  const correctDiv = createOutputDiv("Você acertou " + correctAnswers, "resultado-correto");
+  const wrongDiv = createOutputDiv("Você errou " + wrongAnswers, "resultado-errado");
   const resultElement = window.document.getElementById("container-resultado");
   if (resultElement) {
-    resultElement.appendChild(correctDiv);
-    resultElement.appendChild(wrongDiv);
-  } else {
-    console.error(
-      "Element with id 'container-resultado' not found in the DOM."
-    );
+    try {
+      resultElement.appendChild(correctDiv);
+      resultElement.appendChild(wrongDiv);
+    } catch (error) {
+      handleError(error);
+    }
   }
 }
