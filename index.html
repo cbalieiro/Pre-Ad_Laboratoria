@@ -12,26 +12,30 @@
     <header class="cabecalho">
         <h1>Teste seus Conhecimentos!</h1>
     </header>
-    <div class="container" id="container">
-        <section class="quiz">
-            <h2>Bem-vindo ao nosso desafio!</h2>
-            <p>Preparado para responder a perguntas desafiadoras? Clique abaixo para iniciar.</p>
-            <button id="iniciar-quiz" onclick="startQuiz()">Iniciar</button>
-        </section>
 
-    </div>
-    <div class="resultado" id="resultado" style="display: none;">
-        <p id="saudacao"></p>
-        <section class="quiz" id="quiz-container" >
-        <div id="container-resultado"></div>
-        <div class="container-botao-voltar" style="margin-left: 50px;">
-            <button id="voltar" onclick="goBack()">← Voltar</button>
-        </div> 
-    </section>
-    </div>
+    <main>
+        <section class="quiz tela-inicial" id="tela-inicial">
+            <h2>Bem-vindo ao nosso desafio!</h2>
+            <p>Preparado para responder a perguntas? Clique abaixo para iniciar.</p>
+            <button id="iniciar-quiz" onclick="handleStartQuiz()">Iniciar Quiz</button>
+        </section>
+        <section class="quiz tela-quiz" id="tela-quiz" style="display: none;">
+            <p id="saudacao"></p>
+            <div id="placar-resultado"></div>
+            <button id="proxima-tela" onclick="handleShowTemplateWithAnswers()" style="display: none;">Gabarito</button>
+        </section>
+        <section class="quiz tela-resultado" id="tela-resultado" style="display: none;">
+            <h2>Resultado</h2>
+            <p id="mensagem-resultado"></p>
+            <div id="gabarito"></div>
+            <button id="reiniciar-quiz" onclick="handleGoBack()">Reiniciar Quiz</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>Desenvolvido por Camila Mello</p>
+    </footer>
     <script src="main.js"></script>
 </body>
-<footer>
-    <p>Desenvolvido por Camila Mello</p>
-</footer>
+
 </html>
